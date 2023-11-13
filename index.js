@@ -14,13 +14,25 @@ document.addEventListener('click', function(e){
     else if(e.target.id === 'tweet-btn'){
         handleTweetBtnClick()
     }
+    else if(e.target.dataset.remove){
+        handleRemoveClick(e.target.dataset.remove)
+    }
 })
+
+function handleRemoveClick(tweetId){
+    const targetTweetIndex = tweetsData.findIndex(function(tweet){
+        return tweet.uuid === tweetId;
+    })
+    if (targetTweetIndex >= 0){
+        tweetsData.splice(targetTweetIndex, 1)
+        render()
+    }
+}
  
 function handleLikeClick(tweetId){ 
     const targetTweetObj = tweetsData.filter(function(tweet){
         return tweet.uuid === tweetId
     })[0]
-
     if (targetTweetObj.isLiked){
         targetTweetObj.likes--
     }
@@ -132,6 +144,11 @@ function getFeedHtml(){
                     data-retweet="${tweet.uuid}"
                     ></i>
                     ${tweet.retweets}
+                </span>
+                <span class="tweet-detail">
+                    <i class="fa-solid fa-remove"
+                    data-remove="${tweet.uuid}"
+                    ></i>
                 </span>
             </div>   
         </div>            
